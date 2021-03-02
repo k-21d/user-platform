@@ -14,6 +14,10 @@ import java.util.Properties;
 
 public class DBConnectionManager {
 
+    public DBConnectionManager(Connection connection) {
+        this.connection = connection;
+    }
+
     private Connection connection;
 
     public void setConnection(Connection connection) {

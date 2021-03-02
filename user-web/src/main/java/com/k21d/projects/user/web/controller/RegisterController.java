@@ -7,13 +7,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-@Path("/user")
-public class UserController implements PageController {
+@Path("/register")
+public class RegisterController implements PageController {
     @GET
-    @Path("/register")
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Throwable {
         System.out.println("register...");
         return "register.jsp";
     }
+
 }

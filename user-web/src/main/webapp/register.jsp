@@ -20,16 +20,25 @@
 </head>
 <body>
 	<div class="container">
-		<form class="form-signin">
+		<form class="form-signin" >
 			<h1 class="h3 mb-3 font-weight-normal">注册用户</h1>
-			<label for="inputName" class="sr-only">请输入用户名</label> <input
-				type="name" id="inputName" class="form-control"
+			<label for="inputName" class="sr-only">请输入用户名</label>
+			<input type="name" id="inputName" class="form-control"
 				placeholder="请输入用户名" required autofocus> <label
 				for="inputPassword" class="sr-only">Password</label> <input
 				type="password" id="inputPassword" class="form-control"
 				placeholder="请输入密码" required>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
+			<input type="button" value="注册"  class="btn btn-lg btn-primary btn-block" onClick="tpformsubmit()"/>
 			<p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
 		</form>
+
 	</div>
+			<script>
+                function tpformsubmit(){
+                    var name = $('input[id=inputName]').val();
+                    var password = $('input[id=inputPassword]').val();
+                    url = '/doRegister?name='+name+'&password='+password;
+                    window.location.href = url;
+                }
+            </script>
 </body>
