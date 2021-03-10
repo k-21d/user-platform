@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 
 @Path("/register")
 public class RegisterController implements PageController {
+
     @GET
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Throwable {

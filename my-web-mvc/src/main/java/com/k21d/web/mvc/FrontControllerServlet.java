@@ -4,6 +4,7 @@ package com.k21d.web.mvc;
 import com.k21d.web.mvc.controller.Controller;
 import com.k21d.web.mvc.controller.PageController;
 import com.k21d.web.mvc.controller.RestController;
+import com.k21d.web.mvc.context.ComponentContext;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.RequestDispatcher;
@@ -34,7 +35,6 @@ public class FrontControllerServlet extends HttpServlet {
      * 请求路径和 {@link HandlerMethodInfo} 映射关系缓存
      */
     private Map<String, HandlerMethodInfo> handleMethodInfoMapping = new HashMap<>();
-
     /**
      * 初始化 Servlet
      *
@@ -50,7 +50,10 @@ public class FrontControllerServlet extends HttpServlet {
      * 利用 ServiceLoader 技术（Java SPI）
      */
     private void initHandleMethods() {
-        for (Controller controller : ServiceLoader.load(Controller.class)) {
+        ComponentContext context = ComponentContext.getInstance();
+
+        List<Controller> controllers = context.getControllers();
+        for (Controller controller : controllers) {
             Class<?> controllerClass = controller.getClass();
             Path pathFromClass = controllerClass.getAnnotation(Path.class);
             String requestPath = pathFromClass.value();

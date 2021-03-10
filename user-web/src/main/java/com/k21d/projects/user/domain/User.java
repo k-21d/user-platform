@@ -1,29 +1,50 @@
 package com.k21d.projects.user.domain;
 
+import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 import java.util.Objects;
+
+import static javax.persistence.GenerationType.AUTO;
 
 /**
  * 用户领域对象
  *
  * @since 1.0
  */
-public class User {
+@Entity
+@Table(name = "users")
+public class User implements Serializable {
 
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = AUTO)
+    @NotNull(message = "id能为空")
+    @Min(value =1,message = "id需要大于0")
+    private long id;
 
+    @Column
     private String name;
 
+    @Column
+    @NotNull(message = "密码不能为空")
+    @Max(value = 32,message = "密码需要小于32位")
+    @Min(value =6,message = "密码需要大于6位")
     private String password;
 
     private String email;
-
+    //采用中国大陆方式（11 位校验）
+    @NotNull(message = "手机号不能为空")
+    @Pattern(regexp ="^((17[0-9])|(14[0-9])|(13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$")
     private String phoneNumber;
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -1,3 +1,3 @@
 com.k21d.projects.user.web.controller.RegisterController
 com.k21d.projects.user.web.controller.DoRegisterController
-com.k21d.projects.user.web.controller.ShowController
+com.k21d.projects.user.web.controller.IndexController

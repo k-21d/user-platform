@@ -1,6 +1,7 @@
 package com.k21d.projects.user.repository;
 
-import com.k21d.function.ThrowableFunction;
+import com.k21d.web.mvc.function.ThrowableFunction;
+import com.k21d.web.mvc.context.ComponentContext;
 import com.k21d.projects.user.domain.User;
 import com.k21d.projects.user.sql.DBConnectionManager;
 
@@ -33,6 +34,11 @@ public class DatabaseUserRepository implements UserRepository {
 
     private final DBConnectionManager dbConnectionManager;
 
+    public DatabaseUserRepository() {
+        this.dbConnectionManager = ComponentContext.getInstance()
+                .getComponent("bean/DBConnectionManager");
+    }
+
     public DatabaseUserRepository(DBConnectionManager dbConnectionManager) {
         this.dbConnectionManager = dbConnectionManager;
     }
@@ -43,6 +49,11 @@ public class DatabaseUserRepository implements UserRepository {
 
     @Override
     public boolean save(User user) {
+        int result = executeUpdate(INSERT_USER_DML_SQL, COMMON_EXCEPTION_HANDLER,
+                user.getName(), user.getPassword(), user.getEmail(), user.getPhoneNumber());
+        if(result > 0){
+            return true;
+        }
         return false;
     }
 
@@ -155,7 +166,40 @@ public class DatabaseUserRepository implements UserRepository {
 
         preparedStatementMethodMappings.put(Long.class, "setLong"); // long
         preparedStatementMethodMappings.put(String.class, "setString"); //
+    }
 
-
+    protected int executeUpdate(String sql, Consumer<Throwable> exceptionHandler, Object... args){
+        Connection connection = getConnection();
+        PreparedStatement statement = null;
+        int result = 0;
+        try {
+            statement = connection.prepareStatement(sql);
+            for (int i = 0; i < args.length; i++) {
+                Object arg = args[i];
+                Class argType = arg.getClass();
+                Class wrapperType = wrapperToPrimitive(argType);
+                if (wrapperType == null) {
+                    wrapperType = argType;
+                }
+                String methodName = preparedStatementMethodMappings.get(argType);
+                Method method = PreparedStatement.class.getMethod(methodName, wrapperType);
+                method.invoke(statement, i+1, arg);
+            }
+            result = statement.executeUpdate();
+        } catch (Exception e) {
+            exceptionHandler.accept(e);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                    if (connection != null) {
+                        connection.close();
+                    }
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
+        return result;
     }
 }

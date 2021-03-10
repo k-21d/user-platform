@@ -1,4 +1,4 @@
-package com.k21d.function;
+package com.k21d.web.mvc.function;
 
 
 @FunctionalInterface
