@@ -1,4 +1,4 @@
-package com.k21d.projects.user.web.listener;
+package com.k21d.web.mvc.listener;
 
 import com.k21d.web.mvc.context.ComponentContext;
 

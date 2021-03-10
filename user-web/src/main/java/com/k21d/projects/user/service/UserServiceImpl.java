@@ -4,8 +4,10 @@ import com.k21d.projects.user.domain.User;
 import com.k21d.projects.user.repository.UserRepository;
 
 import javax.annotation.Resource;
+import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.Collection;
+import java.util.Set;
 
 public class UserServiceImpl implements UserService{
     @Resource(name = "bean/UserRepository")
@@ -17,6 +19,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public boolean register(User user) {
+        Set<ConstraintViolation<User>> validate = validator.validate(user);
         return userRepository.save(user);
     }
 
